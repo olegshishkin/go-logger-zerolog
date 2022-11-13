@@ -1,4 +1,4 @@
-package loggers
+package zerolog
 
 import (
 	"github.com/olegshishkin/go-logger"
