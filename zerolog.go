@@ -1,7 +1,7 @@
 package loggers
 
 import (
-	logger "github.com/olegshishkin/go-logger"
+	"github.com/olegshishkin/go-logger"
 	"github.com/pkg/errors"
 	"github.com/rs/zerolog"
 	"gopkg.in/natefinch/lumberjack.v2"
