@@ -3,7 +3,7 @@ module github.com/olegshishkin/go-logger-zerolog
 go 1.19
 
 require (
-	github.com/olegshishkin/go-logger v1.0.1
+	github.com/olegshishkin/go-logger v1.0.2
 	github.com/pkg/errors v0.9.1
 	github.com/rs/zerolog v1.28.0
 	gopkg.in/natefinch/lumberjack.v2 v2.0.0
