@@ -14,8 +14,8 @@ func TestLogger(t *testing.T) {
 		w, err := NewLogWriterBuilder().
 			WithConsoleWriter(zerolog.ConsoleWriter{
 				Out:           buf,
-				PartsExclude:  []string{"time", "level"},
-				FieldsExclude: []string{"logger"},
+				PartsExclude:  []string{zerolog.TimestampFieldName, zerolog.LevelFieldName},
+				FieldsExclude: []string{LogSourceKey},
 				NoColor:       true,
 			}).
 			Build()

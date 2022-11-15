@@ -1,6 +1,7 @@
 package zerolog
 
 import (
+	"fmt"
 	"github.com/olegshishkin/go-logger"
 	"github.com/pkg/errors"
 	"github.com/rs/zerolog"
@@ -11,7 +12,8 @@ import (
 )
 
 const (
-	LogSourceKey = "logger"
+	LogSourceKey  = "logger"
+	colorDarkGray = 90
 )
 
 type writerBuilder struct {
@@ -69,7 +71,7 @@ func Logger(writer io.Writer, level logger.Level) (logger.Logger, error) {
 		Stack().
 		Caller().
 		CallerWithSkipFrameCount(3).
-		Str(LogSourceKey, "common").
+		Str(LogSourceKey, colorize(colorDarkGray, "common")).
 		Logger()
 	return &zeroLogger{&log}, nil
 }
@@ -93,14 +95,26 @@ func toZeroLogLevel(level logger.Level) (zerolog.Level, error) {
 	}
 }
 
+func colorize(c int, m any) string {
+	return fmt.Sprintf("\x1b[%dm%v\x1b[0m", c, m)
+}
+
 func NewLogWriterBuilder() *writerBuilder {
 	return &writerBuilder{}
 }
 
 func (b *writerBuilder) WithConsole() *writerBuilder {
 	var writer io.Writer = zerolog.ConsoleWriter{
-		Out:        os.Stdout,
-		TimeFormat: time.RFC3339Nano,
+		Out:           os.Stdout,
+		TimeFormat:    time.RFC3339Nano,
+		FieldsExclude: []string{LogSourceKey},
+		PartsOrder: []string{
+			zerolog.TimestampFieldName,
+			zerolog.LevelFieldName,
+			LogSourceKey,
+			zerolog.CallerFieldName,
+			zerolog.MessageFieldName,
+		},
 	}
 	return b.WithConsoleWriter(writer)
 }
