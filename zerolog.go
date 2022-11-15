@@ -33,27 +33,27 @@ func (l *zeroLogger) LogLevel(level logger.Level) error {
 }
 
 func (l *zeroLogger) Trace(msg string, vars ...any) {
-	l.log.Trace().Msgf(msg, vars)
+	l.log.Trace().Msgf(msg, vars...)
 }
 
 func (l *zeroLogger) Debug(msg string, vars ...any) {
-	l.log.Debug().Msgf(msg, vars)
+	l.log.Debug().Msgf(msg, vars...)
 }
 
 func (l *zeroLogger) Info(msg string, vars ...any) {
-	l.log.Info().Msgf(msg, vars)
+	l.log.Info().Msgf(msg, vars...)
 }
 
 func (l *zeroLogger) Warn(msg string, vars ...any) {
-	l.log.Warn().Msgf(msg, vars)
+	l.log.Warn().Msgf(msg, vars...)
 }
 
 func (l *zeroLogger) Error(err error, msg string, vars ...any) {
-	l.log.Error().Err(err).Msgf(msg, vars)
+	l.log.Error().Err(err).Msgf(msg, vars...)
 }
 
 func (l *zeroLogger) Fatal(err error, msg string, vars ...any) {
-	l.log.Fatal().Err(err).Msgf(msg, vars)
+	l.log.Fatal().Err(err).Msgf(msg, vars...)
 }
 
 func Logger(writer io.Writer, level logger.Level) (logger.Logger, error) {
@@ -68,6 +68,7 @@ func Logger(writer io.Writer, level logger.Level) (logger.Logger, error) {
 		Timestamp().
 		Stack().
 		Caller().
+		CallerWithSkipFrameCount(3).
 		Str(LogSourceKey, "common").
 		Logger()
 	return &zeroLogger{&log}, nil
