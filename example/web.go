@@ -9,7 +9,7 @@ import (
 func Web(l *zerolog.Logger) *zerolog.Logger {
 	result := l.
 		With().
-		Str(glz.DefaultLogSourceKey, glz.Colorize(glz.DefaultLogSourceColor, glz.DefaultLogWebSource)).
+		Str(glz.DefaultLogSourceKey, glz.DefaultLogWebSource).
 		Logger()
 	return &result
 }

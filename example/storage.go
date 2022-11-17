@@ -9,7 +9,7 @@ import (
 func Storage(l *zerolog.Logger) *zerolog.Logger {
 	result := l.
 		With().
-		Str(glz.DefaultLogSourceKey, glz.Colorize(glz.DefaultLogSourceColor, glz.DefaultLogStorageSource)).
+		Str(glz.DefaultLogSourceKey, glz.DefaultLogStorageSource).
 		Logger()
 	return &result
 }
