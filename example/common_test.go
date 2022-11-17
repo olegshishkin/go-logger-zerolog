@@ -1,31 +1,29 @@
-package zerolog
+package example
 
 import (
 	"bytes"
 	"github.com/olegshishkin/go-logger"
+	glz "github.com/olegshishkin/go-logger-zerolog"
 	"github.com/rs/zerolog"
 	"strings"
 	"testing"
 )
 
-func TestLogger(t *testing.T) {
+func TestCommon(t *testing.T) {
 	t.Run("Logger", func(t *testing.T) {
 		buf := &bytes.Buffer{}
-		w, err := NewLogWriterBuilder().
-			WithConsoleWriter(zerolog.ConsoleWriter{
+		w, err := glz.NewLogWriterBuilder().
+			WithConsole(zerolog.ConsoleWriter{
 				Out:           buf,
 				PartsExclude:  []string{zerolog.TimestampFieldName, zerolog.LevelFieldName},
-				FieldsExclude: []string{LogSourceKey},
+				FieldsExclude: []string{glz.DefaultLogSourceKey},
 				NoColor:       true,
 			}).
 			Build()
 		if err != nil {
 			panic(err)
 		}
-		log, err := Logger(w, logger.Info)
-		if err != nil {
-			panic(err)
-		}
+		log := glz.From(Common(Base(w, logger.Info)))
 		testVar := struct {
 			a, b, c string
 		}{
@@ -36,7 +34,7 @@ func TestLogger(t *testing.T) {
 
 		log.Info("test %+v", testVar)
 
-		if got, want := strings.TrimSpace(buf.String()), "zerolog_test.go:37 > test {a:line a b:line b c:line c}"; got != want {
+		if got, want := strings.TrimSpace(buf.String()), "common_test.go:35 > test {a:line a b:line b c:line c}"; got != want {
 			t.Errorf("\ngot:\n%s\nwant:\n%s", got, want)
 		}
 	})
