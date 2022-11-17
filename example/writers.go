@@ -26,7 +26,7 @@ func ConsoleWriter() io.Writer {
 }
 
 // FileWriter creates an example of the writer instance for logging to the file.
-func FileWriter(file os.File) io.Writer {
+func FileWriter(file *os.File) io.Writer {
 	return &lumberjack.Logger{
 		Filename:   file.Name(),
 		MaxSize:    10,
