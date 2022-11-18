@@ -15,12 +15,20 @@ func From(log *zerolog.Logger) logger.Logger {
 	return &wrapper{log}
 }
 
-func (w *wrapper) LogLevel(level logger.Level) error {
-	zeroLevel, err := ToZeroLogLevel(level)
+func (w *wrapper) GetLevel() logger.Level {
+	l, err := ToLogLevel(w.log.GetLevel())
+	if err != nil {
+		return logger.Fatal
+	}
+	return l
+}
+
+func (w *wrapper) SetLevel(l logger.Level) error {
+	level, err := ToZeroLogLevel(l)
 	if err != nil {
 		return err
 	}
-	w.log.Level(zeroLevel)
+	w.log.Level(level)
 	return nil
 }
 
@@ -48,9 +56,29 @@ func (w *wrapper) Fatal(err error, msg string, vars ...any) {
 	w.log.Fatal().Err(err).Msgf(msg, vars...)
 }
 
+// ToLogLevel transforms Zero log level type to Logger log level type.
+func ToLogLevel(l zerolog.Level) (logger.Level, error) {
+	switch l {
+	case zerolog.TraceLevel:
+		return logger.Trace, nil
+	case zerolog.DebugLevel:
+		return logger.Debug, nil
+	case zerolog.InfoLevel:
+		return logger.Info, nil
+	case zerolog.WarnLevel:
+		return logger.Warn, nil
+	case zerolog.ErrorLevel:
+		return logger.Error, nil
+	case zerolog.FatalLevel:
+		return logger.Fatal, nil
+	default:
+		return logger.Fatal, errors.Errorf("unknown log level: %v", l)
+	}
+}
+
 // ToZeroLogLevel transforms Logger log level type to Zero log level type.
-func ToZeroLogLevel(level logger.Level) (zerolog.Level, error) {
-	switch level {
+func ToZeroLogLevel(l logger.Level) (zerolog.Level, error) {
+	switch l {
 	case logger.Trace:
 		return zerolog.TraceLevel, nil
 	case logger.Debug:
@@ -64,6 +92,6 @@ func ToZeroLogLevel(level logger.Level) (zerolog.Level, error) {
 	case logger.Fatal:
 		return zerolog.FatalLevel, nil
 	default:
-		return zerolog.Disabled, errors.Errorf("unknown log level: %v", level)
+		return zerolog.Disabled, errors.Errorf("unknown log level: %v", l)
 	}
 }
