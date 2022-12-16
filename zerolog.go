@@ -11,7 +11,7 @@ type wrapper struct {
 }
 
 // From transforms source Zero logger to Logger type.
-func From(log *zerolog.Logger) logger.Logger {
+func From(log *zerolog.Logger) *wrapper {
 	return &wrapper{log}
 }
 
