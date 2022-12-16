@@ -11,5 +11,6 @@ func Web(l *zerolog.Logger) *zerolog.Logger {
 		With().
 		Str(glz.DefaultLogSourceKey, glz.DefaultLogWebSource).
 		Logger()
+
 	return &result
 }

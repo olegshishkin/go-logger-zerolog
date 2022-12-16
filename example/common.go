@@ -11,5 +11,6 @@ func Common(l *zerolog.Logger) *zerolog.Logger {
 		With().
 		Str(glz.DefaultLogSourceKey, glz.DefaultLogCommonSource).
 		Logger()
+
 	return &result
 }

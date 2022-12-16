@@ -11,5 +11,6 @@ func Storage(l *zerolog.Logger) *zerolog.Logger {
 		With().
 		Str(glz.DefaultLogSourceKey, glz.DefaultLogStorageSource).
 		Logger()
+
 	return &result
 }

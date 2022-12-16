@@ -7,6 +7,8 @@ import (
 	"io"
 )
 
+const callerWithSkipFrameCount = 3
+
 // Base creates initial logger instance.
 func Base(writer io.Writer, level logger.Level) *zerolog.Logger {
 	zeroLevel, err := glz.ToZeroLogLevel(level)
@@ -20,7 +22,8 @@ func Base(writer io.Writer, level logger.Level) *zerolog.Logger {
 		Timestamp().
 		Stack().
 		Caller().
-		CallerWithSkipFrameCount(3).
+		CallerWithSkipFrameCount(callerWithSkipFrameCount).
 		Logger()
+
 	return &result
 }

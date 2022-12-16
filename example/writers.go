@@ -9,6 +9,12 @@ import (
 	"time"
 )
 
+const (
+	logFileMaxSize    = 10
+	logFileMaxBackups = 5
+	logFileMaxAge     = 30
+)
+
 // ConsoleWriter creates an example of the writer instance for logging to the console.
 func ConsoleWriter() io.Writer {
 	return &zerolog.ConsoleWriter{
@@ -29,9 +35,9 @@ func ConsoleWriter() io.Writer {
 func FileWriter(file *os.File) io.Writer {
 	return &lumberjack.Logger{
 		Filename:   file.Name(),
-		MaxSize:    10,
-		MaxBackups: 5,
-		MaxAge:     30,
+		MaxSize:    logFileMaxSize,
+		MaxBackups: logFileMaxBackups,
+		MaxAge:     logFileMaxAge,
 		Compress:   true,
 	}
 }

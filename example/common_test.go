@@ -1,18 +1,21 @@
-package example
+package example_test
 
 import (
 	"bytes"
 	"github.com/olegshishkin/go-logger"
 	glz "github.com/olegshishkin/go-logger-zerolog"
+	"github.com/olegshishkin/go-logger-zerolog/example"
 	"github.com/rs/zerolog"
 	"strings"
 	"testing"
 )
 
 func TestCommon(t *testing.T) {
+	t.Parallel()
 	t.Run("Logger", func(t *testing.T) {
+		t.Parallel()
 		buf := &bytes.Buffer{}
-		w, err := glz.NewLogWriterBuilder().
+		writer, err := glz.NewLogWriterBuilder().
 			WithConsole(zerolog.ConsoleWriter{
 				Out:           buf,
 				PartsExclude:  []string{zerolog.TimestampFieldName, zerolog.LevelFieldName},
@@ -23,7 +26,7 @@ func TestCommon(t *testing.T) {
 		if err != nil {
 			panic(err)
 		}
-		log := glz.From(Common(Base(w, logger.Info)))
+		log := glz.From(example.Common(example.Base(writer, logger.Info)))
 		testVar := struct {
 			a, b, c string
 		}{
@@ -34,7 +37,9 @@ func TestCommon(t *testing.T) {
 
 		log.Info("test %+v", testVar)
 
-		if got, want := strings.TrimSpace(buf.String()), "common_test.go:35 > test {a:line a b:line b c:line c}"; got != want {
+		want := "common_test.go:38 > test {a:line a b:line b c:line c}"
+		got := strings.TrimSpace(buf.String())
+		if got != want {
 			t.Errorf("\ngot:\n%s\nwant:\n%s", got, want)
 		}
 	})
